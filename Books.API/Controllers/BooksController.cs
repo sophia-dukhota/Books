@@ -22,7 +22,7 @@ namespace Books.API.Controllers
 
         [HttpGet]
         public async Task<List<string>> Get()
-        {
+        { 
 
             try
             {

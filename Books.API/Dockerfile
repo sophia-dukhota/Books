@@ -10,14 +10,20 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Copy only the csproj first (improves caching)
-COPY Books.API.csproj .
-RUN dotnet restore "Books.API.csproj"
+# Copy API project file
+COPY Books.API/Books.API.csproj Books.API/
 
-# Copy the rest of the project
+# Copy shared project file
+COPY Books.Shared/Books.Shared.csproj Books.Shared/
+
+# Restore dependencies
+RUN dotnet restore "Books.API/Books.API.csproj"
+
+# Copy the rest of the solution
 COPY . .
 
-# Build the project
+# Build API
+WORKDIR /src/Books.API
 RUN dotnet build "Books.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Publish stage

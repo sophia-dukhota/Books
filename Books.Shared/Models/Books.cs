@@ -4,6 +4,6 @@
     {
         public string? Name { get; set; }
         public int chapter { get; set; }
-        public string comment { get; set; }
+        public string? comment { get; set; }
     }
 }

@@ -9,7 +9,7 @@
 <button class="btn btn-primary">Add Book</button>
 
 @code {
-    private bool shouldRender;
+    private bool shouldRender = true;
     protected override bool ShouldRender() => shouldRender;
 
     protected override async Task OnInitializedAsync()

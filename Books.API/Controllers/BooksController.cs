@@ -21,34 +21,43 @@ namespace Books.API.Controllers
         }
 
         [HttpGet]
-        public async Task<List<string>> Get()
+        public async Task<List<BookModel>> Get()
         {
-
-            try
+            return new List<BookModel>
             {
-                var result = new List<string>();
-
-                //at some point - put this in a config file
-                var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
-                await using var dataSource = NpgsqlDataSource.Create(connectionString);
-
-                await using var command = dataSource.CreateCommand("SELECT * FROM books");
-                await using (var reader = await command.ExecuteReaderAsync())
+                new BookModel
                 {
-                    while (await reader.ReadAsync())
-                    {
-                        result.Add(reader.GetString(0));
-                    }
-
-                    return result;
+                    Name = "Sample Book",
+                    chapter = 1,
+                    comment = "This is a sample book entry."
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            };
 
-            return new List<string>();
+            //try
+            //{
+            //    var result = new List<string>();
+
+            //    //at some point - put this in a config file
+            //    var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
+            //    await using var dataSource = NpgsqlDataSource.Create(connectionString);
+
+            //    await using var command = dataSource.CreateCommand("SELECT * FROM books");
+            //    await using (var reader = await command.ExecuteReaderAsync())
+            //    {
+            //        while (await reader.ReadAsync())
+            //        {
+            //            result.Add(reader.GetString(0));
+            //        }
+
+            //        return result;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+
+            //return new List<string>();
         }
 
         [HttpPost]

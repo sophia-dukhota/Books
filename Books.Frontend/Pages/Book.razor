@@ -14,7 +14,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        using var request = new HttpRequestMessage(HttpMethod.Get, "https://172.167.22.253:40123/books");
+        using var request = new HttpRequestMessage(HttpMethod.Get, "http://172.167.22.253:40123/books");
         var client = ClientFactory.CreateClient();
 
         using var response = await client.SendAsync(request);

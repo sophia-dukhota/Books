@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Books.Shared.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql;
+using System.ComponentModel;
+using System.Net;
 using BookModel = Books.Shared.Models.Books;
 
 namespace Books.API.Controllers
@@ -9,23 +14,22 @@ namespace Books.API.Controllers
     public class BooksController : ControllerBase
     {
         private readonly ILogger<BooksController> _logger;
-        private readonly IConfiguration _configuration;
 
-        public BooksController(ILogger<BooksController> logger, IConfiguration configuration)
+        public BooksController(ILogger<BooksController> logger)
         {
             _logger = logger;
-            _configuration = configuration;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<string>>> GetAsync()
+        public async Task<List<string>> Get()
         {
 
             try
             {
                 var result = new List<string>();
 
-                var connectionString = GetConnectionString();
+                //at some point - put this in a config file
+                var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
                 await using var dataSource = NpgsqlDataSource.Create(connectionString);
 
                 await using var command = dataSource.CreateCommand("SELECT * FROM books");
@@ -36,33 +40,24 @@ namespace Books.API.Controllers
                         result.Add(reader.GetString(0));
                     }
 
-                    return Ok(result);
+                    return result;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to fetch books.");
+                Console.WriteLine(ex.Message);
             }
 
-            return StatusCode(StatusCodes.Status500InternalServerError, "Unable to fetch books.");
+            return new List<string>();
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] BookModel book)
+        public async Task<IActionResult> Post([FromBody] BookModel book)
         {
-            if (book is null)
-            {
-                return BadRequest("Book payload is required.");
-            }
-
-            if (string.IsNullOrWhiteSpace(book.Name))
-            {
-                return BadRequest("Book name is required.");
-            }
-
             try
             {
-                var connectionString = GetConnectionString();
+                //var book = new Books ("Case File Compedium", 111, "something something He Yu being insane");
+                var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
                 await using var dataSource = NpgsqlDataSource.Create(connectionString);
 
                 var sql = @"INSERT INTO books (name, chapter, comment) VALUES(@name, @chapter, @comment)";
@@ -79,20 +74,9 @@ namespace Books.API.Controllers
 
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to insert book {@Book}", book);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Unable to save book.");
+                Console.WriteLine(ex.Message);
+                return BadRequest();
             }
-        }
-
-        private string GetConnectionString()
-        {
-            var connectionString = _configuration.GetConnectionString("Books");
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                throw new InvalidOperationException("Connection string 'Books' is not configured.");
-            }
-
-            return connectionString;
         }
     }
 }

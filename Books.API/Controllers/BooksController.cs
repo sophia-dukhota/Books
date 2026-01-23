@@ -23,41 +23,37 @@ namespace Books.API.Controllers
         [HttpGet]
         public async Task<List<BookModel>> Get()
         {
-            return new List<BookModel>
+            try
             {
-                new BookModel
+                var result = new List<BookModel>();
+
+               // at some point - put this in a config file
+                var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
+                await using var dataSource = NpgsqlDataSource.Create(connectionString);
+
+                await using var command = dataSource.CreateCommand("SELECT * FROM books");
+                await using (var reader = await command.ExecuteReaderAsync())
                 {
-                    Name = "Sample Book",
-                    chapter = 1,
-                    comment = "This is a sample book entry."
+                    while (await reader.ReadAsync())
+                    {
+                        result.Add(new BookModel
+                        {
+                            Name = reader.GetString(0),
+                            chapter = reader.GetInt32(1),
+                            comment = reader.GetString(2)
+                        });
+
+                    }
+
+                    return result;
                 }
-            };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
-            //try
-            //{
-            //    var result = new List<string>();
-
-            //    //at some point - put this in a config file
-            //    var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
-            //    await using var dataSource = NpgsqlDataSource.Create(connectionString);
-
-            //    await using var command = dataSource.CreateCommand("SELECT * FROM books");
-            //    await using (var reader = await command.ExecuteReaderAsync())
-            //    {
-            //        while (await reader.ReadAsync())
-            //        {
-            //            result.Add(reader.GetString(0));
-            //        }
-
-            //        return result;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
-
-            //return new List<string>();
+            return new List<BookModel>();
         }
 
         [HttpPost]
@@ -65,7 +61,6 @@ namespace Books.API.Controllers
         {
             try
             {
-                //var book = new Books ("Case File Compedium", 111, "something something He Yu being insane");
                 var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
                 await using var dataSource = NpgsqlDataSource.Create(connectionString);
 

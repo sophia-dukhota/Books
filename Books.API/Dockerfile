@@ -4,6 +4,6 @@ RUN dotnet publish /src/Books.API/Books.API.csproj -o /app/publish --no-self-con
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 COPY --from=build /app/publish /app
-EXPOSE 80
+EXPOSE 9090
 WORKDIR /app
 ENTRYPOINT ["dotnet", "/app/Books.API.dll"]

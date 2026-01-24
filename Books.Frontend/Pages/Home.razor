@@ -1,7 +1,58 @@
 ﻿@page "/"
+@using Books.Shared.Models
+@using System.Net.Http.Json
+@inject HttpClient Http
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Books</h1>
 
-Welcome to your new app.
+@if (_isLoading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <p class="text-danger">@_error</p>
+}
+else if (_books is not { Count: > 0 })
+{
+    <p>No books found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var book in _books)
+        {
+            <li>
+                <strong>@book.Name</strong> — Chapters: @book.chapter
+                @if (!string.IsNullOrWhiteSpace(book.comment))
+                {
+                    <div>@book.comment</div>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Books>? _books;
+    private bool _isLoading = true;
+    private string? _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+             _books = await Http.GetFromJsonAsync<List<Books>>("https://api.sophia-dukhota.com/books");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}

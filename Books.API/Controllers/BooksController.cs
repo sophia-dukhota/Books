@@ -21,14 +21,13 @@ namespace Books.API.Controllers
         }
 
         [HttpGet]
-        public async Task<List<string>> Get()
+        public async Task<List<BookModel>> Get()
         {
-
             try
             {
-                var result = new List<string>();
+                var result = new List<BookModel>();
 
-                //at some point - put this in a config file
+               // at some point - put this in a config file
                 var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
                 await using var dataSource = NpgsqlDataSource.Create(connectionString);
 
@@ -37,7 +36,13 @@ namespace Books.API.Controllers
                 {
                     while (await reader.ReadAsync())
                     {
-                        result.Add(reader.GetString(0));
+                        result.Add(new BookModel
+                        {
+                            Name = reader.GetString(0),
+                            chapter = reader.GetInt32(1),
+                            comment = reader.GetString(2)
+                        });
+
                     }
 
                     return result;
@@ -48,7 +53,7 @@ namespace Books.API.Controllers
                 Console.WriteLine(ex.Message);
             }
 
-            return new List<string>();
+            return new List<BookModel>();
         }
 
         [HttpPost]
@@ -56,7 +61,6 @@ namespace Books.API.Controllers
         {
             try
             {
-                //var book = new Books ("Case File Compedium", 111, "something something He Yu being insane");
                 var connectionString = "Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books";
                 await using var dataSource = NpgsqlDataSource.Create(connectionString);
 

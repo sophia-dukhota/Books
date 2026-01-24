@@ -44,7 +44,7 @@ else
     {
         try
         {
-             _books = await Http.GetFromJsonAsync<List<Books>>("https://api.sophia-dukhota:40123/books");
+             _books = await Http.GetFromJsonAsync<List<Books>>("https://api.sophia-dukhota.com:40123/books");
         }
         catch (Exception ex)
         {

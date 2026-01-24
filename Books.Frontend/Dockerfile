@@ -6,4 +6,4 @@ FROM nginx:1.29.4-alpine3.23
 COPY --from=blazor_build /app/publish/wwwroot /var/www/html
 COPY --from=blazor_build /src/Books.Frontend/nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+EXPOSE 9090

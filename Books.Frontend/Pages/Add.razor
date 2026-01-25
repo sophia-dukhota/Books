@@ -2,32 +2,42 @@
 @using Books.Shared.Models
 @inject HttpClient Http
 
-<h3>Add</h3>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Add Book</h3>
 
-<EditForm Model="book" OnValidSubmit="Submit" FormName="AddBook">
-    <DataAnnotationsValidator />
-        <div>
-            <label>
-                Name:
-                <InputText @bind-Value="book.Name"/>
-            </label>
+                    <EditForm Model="book" OnValidSubmit="Submit" FormName="AddBook">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="alert alert-danger" />
+
+                        <div class="mb-3">
+                            <label class="form-label" for="book-name">Name</label>
+                            <InputText id="book-name" class="form-control" @bind-Value="book.Name" />
+                            <ValidationMessage For="() => book.Name" class="text-danger" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="book-chapter">Chapter</label>
+                            <InputNumber id="book-chapter" class="form-control" @bind-Value="book.chapter" />
+                            <ValidationMessage For="() => book.chapter" class="text-danger" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" for="book-description">Description</label>
+                            <InputTextArea id="book-description" class="form-control" rows="4" @bind-Value="book.comment" />
+                            <ValidationMessage For="() => book.comment" class="text-danger" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </EditForm>
+                </div>
+            </div>
         </div>
-        <div>
-            <label>
-                Chapter:
-            <InputNumber @bind-Value="book.chapter" />
-            </label>
-        </div>
-        <div>
-            <label>
-                Description: 
-                <InputTextArea @bind-Value="book.comment"/>
-            </label>
-        </div>
-        <div>
-            <button type="submit">Submit</button>
-        </div>
-</EditForm>
+    </div>
+</div>
 
 @code {
     private Books book = new Books();

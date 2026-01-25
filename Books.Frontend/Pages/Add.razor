@@ -1,0 +1,30 @@
+﻿@page "/add"
+@using Books.Shared.Models
+
+<h3>Add</h3>
+
+<EditForm Model="book" FormName="AddBook">
+    <DataAnnotationsValidator />
+        <div>
+            <label>
+                Name:
+                <InputText @bind-Value="book.Name"/>
+            </label>
+        </div>
+        <div>
+            <label>
+                Chapter:
+            <InputNumber @bind-Value="book.chapter" />
+            </label>
+        </div>
+        <div>
+            <label>
+                Description: 
+                <InputTextArea @bind-Value="book.comment"/>
+            </label>
+        </div>
+</EditForm>
+
+@code {
+    private Books book = new Books();
+}

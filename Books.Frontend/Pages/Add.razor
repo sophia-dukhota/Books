@@ -1,9 +1,10 @@
 ﻿@page "/add"
 @using Books.Shared.Models
+@inject HttpClient Http
 
 <h3>Add</h3>
 
-<EditForm Model="book" FormName="AddBook">
+<EditForm Model="book" OnValidSubmit="Submit" FormName="AddBook">
     <DataAnnotationsValidator />
         <div>
             <label>
@@ -23,8 +24,18 @@
                 <InputTextArea @bind-Value="book.comment"/>
             </label>
         </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
 </EditForm>
 
 @code {
     private Books book = new Books();
+
+    private async Task Submit()
+    {
+        var response = await Http.PostAsJsonAsync("https://api.sophia-dukhota.com/books", book);
+        Console.WriteLine($"Name {book.Name}, chapter: {book.chapter}, comment: {book.comment}");
+        book = new Books();
+    }
 }

@@ -1,4 +1,6 @@
 
+using Npgsql;
+
 namespace Books.API
 {
     public class Program
@@ -12,6 +14,8 @@ namespace Books.API
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddSingleton(NpgsqlDataSource.Create("Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books"));
 
             builder.Services.AddCors(options =>
             {

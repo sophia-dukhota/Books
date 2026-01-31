@@ -2,6 +2,6 @@
 
 public class Constants
 {
-    public const string CONNECTIONSTRING_SECRETNAME = "connection_string_secret";
-    public const string CONNECTIONSTRING_FILELOCATION = "/run/secrets/connection_string_secret";
+    public const string appSettings = "appsettings.json";
+    public const string connStrLocation = "CONNECTIONSTRING_FILELOCATION";
 }

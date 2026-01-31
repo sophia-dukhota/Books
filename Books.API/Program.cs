@@ -14,15 +14,17 @@ public class Program
         builder.Services.AddOpenApi();
 
         string connectionString = string.Empty;
+        var config = new ConfigurationBuilder().AddJsonFile(Constants.appSettings).Build();
+        var connStrLocation = config[Constants.connStrLocation];
 
-        if (File.Exists(Constants.CONNECTIONSTRING_FILELOCATION))
+        if (File.Exists(connStrLocation))
         {
-            connectionString = File.ReadAllText(Constants.CONNECTIONSTRING_FILELOCATION);
+            connectionString = File.ReadAllText(connStrLocation);
         }
 
         else
         {
-            throw new Exception(nameof(Constants.CONNECTIONSTRING_FILELOCATION));
+            throw new Exception(nameof(connStrLocation));
         }
 
         builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString));

@@ -1,4 +1,4 @@
-
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
 namespace Books.API
@@ -15,7 +15,9 @@ namespace Books.API
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            builder.Services.AddSingleton(NpgsqlDataSource.Create("Host=172.167.22.253:5432;Username=hurew6shw6y329uehwsjq;Password=deuigdyw82wjia;Database=Books"));
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+            builder.Services.AddSingleton(NpgsqlDataSource.Create(config["ConnectionString"]));
 
             builder.Services.AddCors(options =>
             {

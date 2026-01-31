@@ -65,7 +65,7 @@ namespace Books.API.Controllers
 
                 cmd.Parameters.AddWithValue("@name", book.Name ?? string.Empty);
                 cmd.Parameters.AddWithValue("@chapter", book.chapter);
-                cmd.Parameters.AddWithValue("@comment", book.comment);
+                cmd.Parameters.AddWithValue("@comment", book.comment ?? string.Empty);
 
                 await cmd.ExecuteNonQueryAsync();
 

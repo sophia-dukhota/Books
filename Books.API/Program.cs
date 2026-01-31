@@ -15,11 +15,6 @@ public class Program
 
         string connectionString = string.Empty;
 
-        //var config = new ConfigurationBuilder().AddJsonFile(Constants.appSettings).Build();
-        //var connectionString = config[Constants.connectionString];
-        //if (string.IsNullOrWhiteSpace(connectionString))
-        //  throw new Exception(nameof(connectionString));
-
         if (File.Exists(Constants.CONNECTIONSTRING_FILELOCATION))
         {
             connectionString = File.ReadAllText(Constants.CONNECTIONSTRING_FILELOCATION);

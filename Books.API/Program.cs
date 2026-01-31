@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using Constants = Books.API.Models.Constants;
 
 namespace Books.API
 {
@@ -10,14 +11,16 @@ namespace Books.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var config = new ConfigurationBuilder().AddJsonFile(Constants.appSettings).Build();
+            var connectionString = config[Constants.connectionString];
+            if (string.IsNullOrWhiteSpace(connectionString))
+                throw new Exception(nameof(connectionString));
 
-            builder.Services.AddSingleton(NpgsqlDataSource.Create(config["ConnectionString"]));
+            builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString));
 
             builder.Services.AddCors(options =>
             {

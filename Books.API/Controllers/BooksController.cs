@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using Npgsql.Replication.TestDecoding;
 using System.ComponentModel;
@@ -41,7 +42,6 @@ namespace Books.API.Controllers
                             chapter = reader.GetInt32(1),
                             comment = reader.GetString(2)
                         });
-
                     }
 
                     return result;
@@ -68,6 +68,8 @@ namespace Books.API.Controllers
                 cmd.Parameters.AddWithValue("@comment", book.comment ?? string.Empty);
 
                 await cmd.ExecuteNonQueryAsync();
+
+                _logger.LogInformation("A NEW BOOK HAS BEEN ADDED");
 
                 return Ok();
             }

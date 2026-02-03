@@ -1,4 +1,5 @@
 using Npgsql;
+using Microsoft.ApplicationInsights;
 
 namespace Books.API;
 
@@ -26,6 +27,8 @@ public class Program
         {
             throw new Exception(nameof(connStrLocation));
         }
+
+        builder.Services.AddApplicationInsightsTelemetry();
 
         builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString));
 

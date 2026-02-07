@@ -44,7 +44,7 @@ namespace Books.API.Controllers
                         });
                     }
 
-                    _logger.LogInformation("GET request found {GetResult} books", result.Count);
+                    _logger.LogInformation("JOPA GET request found {GetResult} books", result.Count);
                     return result;
                 }
             }

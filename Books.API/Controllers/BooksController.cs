@@ -29,6 +29,7 @@ namespace Books.API.Controllers
         {
             try
             {
+                _logger.LogError("JOPA");
                 var result = new List<BookModel>();
 
                 await using var command = _dataSource.CreateCommand("SELECT * FROM books");

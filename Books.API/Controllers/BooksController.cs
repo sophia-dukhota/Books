@@ -29,7 +29,6 @@ namespace Books.API.Controllers
         {
             try
             {
-                _logger.LogError("JOPA");
                 var result = new List<BookModel>();
 
                 await using var command = _dataSource.CreateCommand("SELECT * FROM books");
@@ -45,6 +44,7 @@ namespace Books.API.Controllers
                         });
                     }
 
+                    _logger.LogInformation("GET request found {GetResult} books", result.Count);
                     return result;
                 }
             }
@@ -70,7 +70,7 @@ namespace Books.API.Controllers
 
                 await cmd.ExecuteNonQueryAsync();
 
-                _logger.LogInformation("A NEW BOOK HAS BEEN ADDED");
+                _logger.LogInformation("POST request added {BookName}", book.Name);
 
                 return Ok();
             }

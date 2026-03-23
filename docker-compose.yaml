@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+
+  postgres:
+    image: postgres:14.19-alpine3.21
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=hurew6shw6y329uehwsjq
+      - POSTGRES_PASSWORD=deuigdyw82wjia
+      - POSTGRES_DB=Books
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  booksapi:
+    image: booksapi:latest
+    restart: always
+    secrets:
+      - connection_string_secret
+    environment:
+      - ASPNETCORE_HTTP_PORTS=9090
+
+  booksfrontend:
+    image: booksfrontend:latest
+    restart: always
+    ports:
+      - 80:80
+
+secrets:
+  connection_string_secret:
+    file: ./connection_string_secret.txt
+
+volumes:
+  db:
+    driver: local
